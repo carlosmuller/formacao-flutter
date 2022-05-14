@@ -1,6 +1,6 @@
 const tituloAppBarListaTransferencia = 'Transferencias';
 const tituloAppBarDashboard = 'Dashboard';
-const tituloAppBarContatos = 'Contatos';
+const tituloAppBarContatos = 'Tranferir';
 const textoContatos = tituloAppBarContatos;
 
 //compartilhado
