@@ -3,11 +3,11 @@ import 'package:bytebank/dao/transferencia_dao.dart';
 import 'package:bytebank/http/cliente_web.dart';
 import 'package:bytebank/models/transferencia.dart';
 import 'package:bytebank/screens/transferencia/formulario.dart';
+import 'package:bytebank/service/tranferencia_service.dart';
 import 'package:bytebank/textos.dart';
 import 'package:flutter/material.dart';
 
 class ListaTransferencia extends StatefulWidget {
-  final List<Transferencia> _transferencias = List.empty(growable: true);
 
   ListaTransferencia({Key? key}) : super(key: key);
 
@@ -27,7 +27,7 @@ class ListaTransferenciaState extends State<ListaTransferencia> {
       ),
       body:FutureBuilder<List<Transferencia>>(
         initialData: List.empty(growable: false),
-        future: listaTransacoes(),
+        future: TransferenciaService().listaTransacoes(),
         builder: (context, snapshot) {
           //conteudo retornado da future
           switch (snapshot.connectionState) {
@@ -59,11 +59,6 @@ class ListaTransferenciaState extends State<ListaTransferencia> {
       //           (transferenciaRecebida) => _atualiza(transferenciaRecebida));
       //     }),
     );
-  }
-
-  void _atualiza(Transferencia? transferenciaRecebida) {
-    setState(() {
-    });
   }
 }
 
