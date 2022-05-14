@@ -1,0 +1,15 @@
+### Retorna as transações cadastradas
+GET http://localhost:8080/transactions
+
+### Cria uma nova transação
+POST http://localhost:8080/transactions
+Content-Type: application/json
+password: 1000
+
+{
+  "value": {{$randomInt}},
+  "contact": {
+    "name": "gui",
+    "accountNumber": 1000
+  }
+}

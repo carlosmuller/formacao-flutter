@@ -24,22 +24,28 @@ class Dashboard extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             child: Row(
               children: [
-                _Item(textoContatos, Icons.monetization_on, () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return ListaContatos();
-                  }));
-                }),
-                _Item(tituloAppBarListaTransferencia, Icons.description, () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return ListaTransferencia();
-                  }));
-                }),
+                _Item(textoContatos, Icons.monetization_on,
+                    () => _vaiParaContatos(context)),
+                _Item(tituloAppBarListaTransferencia, Icons.description,
+                    () => _vaiParaListaDeTransferencias(context)),
               ],
             ),
           ),
         ],
       ),
     );
+  }
+
+  _vaiParaContatos(BuildContext context) {
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+      return ListaContatos();
+    }));
+  }
+
+  _vaiParaListaDeTransferencias(BuildContext context) {
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+      return ListaTransferencia();
+    }));
   }
 }
 

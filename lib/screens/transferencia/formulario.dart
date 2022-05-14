@@ -20,6 +20,7 @@ class FormularioTransferenciaState extends State<FormularioTransferencia> {
   final TextEditingController _controladorCampoNumeroDaConta =
       TextEditingController();
   final TextEditingController _controladorCampoValor = TextEditingController();
+  Contato? _contato;
   List<Contato> _contatos = List.empty(growable: true);
 
   @override
@@ -52,10 +53,7 @@ class FormularioTransferenciaState extends State<FormularioTransferencia> {
               },
               onSelected: (Contato contato) {
                 debugPrint('Você selecionou ${contato}');
-                setState(() {
-                  _controladorCampoNumeroDaConta.value =
-                      TextEditingValue(text: contato.numeroDaConta.toString());
-                });
+                _contato = contato;
               },
 
               // controlador: _controladorCampoNumeroDaConta,
@@ -83,13 +81,11 @@ class FormularioTransferenciaState extends State<FormularioTransferencia> {
 
   void _criaTransferencia(BuildContext context) {
     final double? valor = double.tryParse(_controladorCampoValor.text);
-    final int? numeroDaConta =
-        int.tryParse(_controladorCampoNumeroDaConta.text);
-    if (numeroDaConta == null || valor == null) {
-      debugPrint('${numeroDaConta} - ${valor}');
+    if (_contato == null || valor == null) {
+      debugPrint('${_contato} - ${valor}');
       return;
     }
-    final transferenciaCriada = Transferencia(valor, numeroDaConta);
+    final transferenciaCriada = Transferencia(valor, _contato!);
     TransferenciaDAO()
         .salva(transferenciaCriada)
         .then((value) => Navigator.pop(context, transferenciaCriada));

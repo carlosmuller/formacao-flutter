@@ -1,5 +1,6 @@
 import 'package:bytebank/components/carregando.dart';
 import 'package:bytebank/dao/transferencia_dao.dart';
+import 'package:bytebank/http/cliente_web.dart';
 import 'package:bytebank/models/transferencia.dart';
 import 'package:bytebank/screens/transferencia/formulario.dart';
 import 'package:bytebank/textos.dart';
@@ -18,8 +19,6 @@ class ListaTransferencia extends StatefulWidget {
 
 class ListaTransferenciaState extends State<ListaTransferencia> {
 
-  final TransferenciaDAO _dao = TransferenciaDAO();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,7 +27,7 @@ class ListaTransferenciaState extends State<ListaTransferencia> {
       ),
       body:FutureBuilder<List<Transferencia>>(
         initialData: List.empty(growable: false),
-        future: _dao.listaTodos(),
+        future: listaTransacoes(),
         builder: (context, snapshot) {
           //conteudo retornado da future
           switch (snapshot.connectionState) {
@@ -39,7 +38,7 @@ class ListaTransferenciaState extends State<ListaTransferencia> {
             case ConnectionState.active:
               break;
             case ConnectionState.done:
-              final List<Transferencia> transferencias = snapshot.data!;
+              final List<Transferencia> transferencias = snapshot.data?? List.empty();
               return ListView.builder(
                 itemCount: transferencias.length,
                 itemBuilder: (context, indice) {
@@ -51,14 +50,14 @@ class ListaTransferenciaState extends State<ListaTransferencia> {
           return Text('deu ruim');
         },
       ),
-      floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.add),
-          onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return FormularioTransferencia();
-            })).then(
-                (transferenciaRecebida) => _atualiza(transferenciaRecebida));
-          }),
+      // floatingActionButton: FloatingActionButton(
+      //     child: Icon(Icons.add),
+      //     onPressed: () {
+      //       Navigator.push(context, MaterialPageRoute(builder: (context) {
+      //         return FormularioTransferencia();
+      //       })).then(
+      //           (transferenciaRecebida) => _atualiza(transferenciaRecebida));
+      //     }),
     );
   }
 

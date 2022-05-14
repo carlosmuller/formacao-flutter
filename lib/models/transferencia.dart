@@ -1,11 +1,13 @@
+import 'package:bytebank/models/contato.dart';
+
 class Transferencia {
   final double _valor;
-  final int _numeroDaConta;
+  final Contato _contato;
   int? _id;
 
-  Transferencia(this._valor, this._numeroDaConta,[this._id]);
+  Transferencia(this._valor, this._contato,[this._id]);
 
-  int get numeroDaConta => _numeroDaConta;
+  int get numeroDaConta => this._contato.numeroDaConta;
 
   double get valor => _valor;
 
@@ -18,6 +20,12 @@ class Transferencia {
 
   @override
   String toString() {
-    return 'Transferencia{_valor: $_valor, _numeroConta: $_numeroDaConta, _id: $_id}';
+    return 'Transferencia{_valor: $_valor, contato: $_contato, _id: $_id}';
+  }
+
+  static Transferencia doJson(transferenciaJson) {
+    final  valor = transferenciaJson['value'];
+    final contatoJson = transferenciaJson['contact'];
+    return Transferencia(valor, Contato(contatoJson['name'], contatoJson['accountNumber']));
   }
 }

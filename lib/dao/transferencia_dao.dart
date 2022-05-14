@@ -1,4 +1,5 @@
 import 'package:bytebank/infra/banco_de_dados.dart';
+import 'package:bytebank/models/contato.dart';
 import 'package:bytebank/models/transferencia.dart';
 
 class TransferenciaDAO {
@@ -32,7 +33,7 @@ class TransferenciaDAO {
   List<Transferencia> _paraLista(List<Map<String, dynamic>> resultados) {
     return resultados.map((Map<String, dynamic> linha) {
       final Transferencia transferencia =
-          Transferencia(linha[_valor] / 100, linha[_numeroDaConta], linha[_id]);
+          Transferencia(linha[_valor] / 100, Contato(linha[_numeroDaConta], linha[_numeroDaConta]), linha[_id]);
       return transferencia;
     }).toList(growable: false);
   }
