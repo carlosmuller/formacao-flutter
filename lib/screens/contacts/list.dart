@@ -59,7 +59,7 @@ class ContactListState extends State<ContactList> {
             Navigator.push(context, MaterialPageRoute(builder: (context) {
               return ContactForm();
             })).then((newContact) {
-              setState(() {});
+
             });
           }),
     );

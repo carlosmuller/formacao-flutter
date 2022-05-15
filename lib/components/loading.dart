@@ -2,7 +2,8 @@ import 'package:bytebank/texts.dart';
 import 'package:flutter/material.dart';
 
 class Loading extends StatelessWidget {
-  const Loading({Key? key}) : super(key: key);
+  final String message;
+  const Loading({Key? key, this.message = loading}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +13,10 @@ class Loading extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           CircularProgressIndicator(),
-          Text(loading),
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: Text(message, style: TextStyle(fontSize: 16),),
+          ),
         ],
       ),
     );

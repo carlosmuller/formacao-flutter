@@ -1,6 +1,8 @@
 import 'dart:async';
 
+
 import 'package:bytebank/components/editor.dart';
+import 'package:bytebank/components/loading.dart';
 import 'package:bytebank/components/reponse_dialog.dart';
 import 'package:bytebank/components/transaction_auth_dialog.dart';
 import 'package:bytebank/exceptions/custom_exceptions.dart';
@@ -9,6 +11,7 @@ import 'package:bytebank/models/contact.dart';
 import 'package:bytebank/models/transaction.dart';
 import 'package:bytebank/texts.dart';
 import 'package:flutter/material.dart';
+
 import 'package:uuid/uuid.dart';
 
 class TransactionForm extends StatefulWidget {
@@ -26,7 +29,7 @@ class TransactionFormState extends State<TransactionForm> {
   final TextEditingController _valueController = TextEditingController();
   final TransactionWebClient _webClient = TransactionWebClient();
   final String transactionId = Uuid().v4();
-
+  bool _sending = false;
   @override
   Widget build(BuildContext context) {
     print('Transação id: $transactionId');
@@ -40,6 +43,13 @@ class TransactionFormState extends State<TransactionForm> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
+              Visibility(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Loading(message: sendingTransaction),
+                ),
+                visible: _sending,
+              ),
               Text(
                 widget.contact.name,
                 style: TextStyle(
@@ -99,12 +109,9 @@ class TransactionFormState extends State<TransactionForm> {
           .showSnackBar(SnackBar(content: Text(transactionShouldHaveValue)));
       return;
     }
-    final Transaction transaction = await _webClient
-        .save(Transaction(value, widget.contact, transactionId), password)
-        .catchError((e) => _showFailureDialog(context, message: couldNotContactTheServer), test: (e) => e is TimeoutException)
-        .catchError((e) => _showFailureDialog(context, message: e.message), test: (e) => e is HttpException)
-        .catchError((e) => _showFailureDialog(context), test: (e) => e is Exception);
 
+    final Transaction transaction = await _send(value, password)
+        .whenComplete(() => setState(() => _sending = false));
 
     if (transaction != null) {
       await showDialog(
@@ -112,8 +119,20 @@ class TransactionFormState extends State<TransactionForm> {
           builder: (contextDialog) {
             return SuccessDialog(succesOnCreate);
           });
+
       Navigator.of(context).pop();
     }
+  }
+
+  Future<Transaction> _send(value, password){
+    setState(() {
+      _sending = true;
+    });
+    return  _webClient
+        .save(Transaction(value, widget.contact, transactionId), password)
+        .catchError((e) => _showFailureDialog(context, message: couldNotContactTheServer), test: (e) => e is TimeoutException)
+        .catchError((e) => _showFailureDialog(context, message: e.message), test: (e) => e is HttpException)
+        .catchError((e) => _showFailureDialog(context), test: (e) => e is Exception);
   }
 
   Future _showFailureDialog(BuildContext context, {String message = unknownErrorMessage}) async {
@@ -122,5 +141,6 @@ class TransactionFormState extends State<TransactionForm> {
         builder: (contextDialog) {
           return FailureDialog(message);
     });
+    return null;
   }
 }
