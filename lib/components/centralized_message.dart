@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-class MensagemCentralizada extends StatelessWidget {
+class CentralizedMessage extends StatelessWidget {
   final String mensagem;
   final IconData? icone;
   final double tamanhoDoIcone;
   final double tamanhoDaFonte;
 
-  const MensagemCentralizada(
+  const CentralizedMessage(
       {Key? key,
       required this.mensagem,
       this.icone,
@@ -41,10 +41,10 @@ class MensagemCentralizada extends StatelessWidget {
   }
 }
 
-class MensagemErroInesperado extends StatelessWidget {
+class UknownErroMessage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return const MensagemCentralizada(
+    return const CentralizedMessage(
         mensagem: 'Erro inesperado', icone: Icons.error);
   }
 }

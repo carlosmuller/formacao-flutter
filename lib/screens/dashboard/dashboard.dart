@@ -1,6 +1,6 @@
-import 'package:bytebank/screens/contatos/lista.dart';
-import 'package:bytebank/screens/transferencia/lista.dart';
-import 'package:bytebank/textos.dart';
+import 'package:bytebank/screens/contacts/list.dart';
+import 'package:bytebank/screens/transactions/lista.dart';
+import 'package:bytebank/texts.dart';
 import 'package:flutter/material.dart';
 
 class Dashboard extends StatelessWidget {
@@ -10,7 +10,7 @@ class Dashboard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(tituloAppBarDashboard),
+        title: Text(dashboardTitle),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -24,10 +24,10 @@ class Dashboard extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             child: Row(
               children: [
-                _Item(textoContatos, Icons.monetization_on,
-                    () => _vaiParaContatos(context)),
-                _Item(tituloAppBarListaTransferencia, Icons.description,
-                    () => _vaiParaListaDeTransferencias(context)),
+                _Item(contactsText, Icons.monetization_on,
+                    () => _goToContacts(context)),
+                _Item(transactionListTitle, Icons.description,
+                    () => _goToTransactionList(context)),
               ],
             ),
           ),
@@ -36,15 +36,15 @@ class Dashboard extends StatelessWidget {
     );
   }
 
-  _vaiParaContatos(BuildContext context) {
+  _goToContacts(BuildContext context) {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-      return ListaContatos();
+      return ContactList();
     }));
   }
 
-  _vaiParaListaDeTransferencias(BuildContext context) {
+  _goToTransactionList(BuildContext context) {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-      return ListaTransferencia();
+      return TransactionList();
     }));
   }
 }

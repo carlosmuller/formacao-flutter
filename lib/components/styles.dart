@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-ButtonStyle acaoPrimariaPositiva(context) {
+ButtonStyle positivePrimaryAction(context) {
  return ButtonStyle(
     backgroundColor: MaterialStateProperty.resolveWith<Color?>(
           (Set<MaterialState> states) {
