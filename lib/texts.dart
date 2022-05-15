@@ -29,7 +29,7 @@ const valueFieldHint = '0.00';
 const transactionShouldHaveValue = 'Transações devem ter valor';
 const transactionFormAction = 'Criar Transação';
 const succesOnCreate = 'Transação criada com sucesso';
-
+const transactionAlreadyExists = 'Transacao ja salva';
 
 //transferencia lista
 const noTransactions = "Sem transações";

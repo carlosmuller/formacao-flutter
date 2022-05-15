@@ -29,6 +29,7 @@ class TransactionFormState extends State<TransactionForm> {
 
   @override
   Widget build(BuildContext context) {
+    print('Transação id: $transactionId');
     return Scaffold(
       appBar: AppBar(
         title: const Text(transactionFormTitle),
@@ -103,6 +104,7 @@ class TransactionFormState extends State<TransactionForm> {
         .catchError((e) => _showFailureDialog(context, message: couldNotContactTheServer), test: (e) => e is TimeoutException)
         .catchError((e) => _showFailureDialog(context, message: authenticationError), test: (e) => e is Unauthorized)
         .catchError((e) => _showFailureDialog(context, message: transactionShouldHaveValue), test: (e) => e is BadRequest)
+        .catchError((e) => _showFailureDialog(context, message: transactionAlreadyExists), test: (e) => e is Conflict)
         .catchError((e) => _showFailureDialog(context), test: (e) => e is Exception);
 
 
