@@ -1,15 +1,19 @@
+import 'dart:async';
+
 import 'package:bytebank/components/editor.dart';
+import 'package:bytebank/components/reponse_dialog.dart';
+import 'package:bytebank/components/transaction_auth_dialog.dart';
+import 'package:bytebank/exceptions/custom_exceptions.dart';
+import 'package:bytebank/http/webclients/transaction_web_client.dart';
 import 'package:bytebank/models/contact.dart';
 import 'package:bytebank/models/transaction.dart';
-import 'package:bytebank/http/webclients/transaction_web_client.dart';
 import 'package:bytebank/texts.dart';
 import 'package:flutter/material.dart';
 
 class TransactionForm extends StatefulWidget {
   final Contact contact;
 
-  const TransactionForm({Key? key, required this.contact})
-      : super(key: key);
+  const TransactionForm({Key? key, required this.contact}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -19,7 +23,7 @@ class TransactionForm extends StatefulWidget {
 
 class TransactionFormState extends State<TransactionForm> {
   final TextEditingController _valueController = TextEditingController();
-  final TransactionWebClient _webClient =  TransactionWebClient();
+  final TransactionWebClient _webClient = TransactionWebClient();
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +69,16 @@ class TransactionFormState extends State<TransactionForm> {
                   width: double.maxFinite,
                   child: ElevatedButton(
                     child: Text(transactionFormAction),
-                    onPressed: () => _saveTransaction(context),
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (contextDialog) => TransactionAuthDialog(
+                          onConfirm: (password) {
+                            _saveTransaction(context, password);
+                          },
+                        ),
+                      );
+                    },
                   ),
                 ),
               )
@@ -76,19 +89,36 @@ class TransactionFormState extends State<TransactionForm> {
     );
   }
 
-  void _saveTransaction(BuildContext context) {
+  void _saveTransaction(BuildContext context, String password) async {
     final double? value = double.tryParse(_valueController.text);
     if (value == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(transactionShouldHaveValue))
-      );
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(transactionShouldHaveValue)));
       return;
     }
-    final transaction = Transaction(value, widget.contact);
-    _webClient.save(transaction).then((transctionFromClient) {
-      if(transctionFromClient != null){
-        Navigator.of(context).pop();
-      }
+    final Transaction transaction = await _webClient
+        .save(Transaction(value, widget.contact), password)
+        .catchError((e) => _showFailureDialog(context, message: couldNotContactTheServer), test: (e) => e is TimeoutException)
+        .catchError((e) => _showFailureDialog(context, message: authenticationError), test: (e) => e is Unauthorized)
+        .catchError((e) => _showFailureDialog(context, message: transactionShouldHaveValue), test: (e) => e is BadRequest)
+        .catchError((e) => _showFailureDialog(context), test: (e) => e is Exception);
+
+
+    if (transaction != null) {
+      await showDialog(
+          context: context,
+          builder: (contextDialog) {
+            return SuccessDialog(succesOnCreate);
+          });
+      Navigator.of(context).pop();
+    }
+  }
+
+  Future _showFailureDialog(BuildContext context, {String message = unknownErrorMessage}) async {
+    return  await showDialog(
+        context: context,
+        builder: (contextDialog) {
+          return FailureDialog(message);
     });
   }
 }

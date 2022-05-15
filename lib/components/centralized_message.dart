@@ -41,10 +41,10 @@ class CentralizedMessage extends StatelessWidget {
   }
 }
 
-class UknownErroMessage extends StatelessWidget {
+class UnknownErrorMessage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const CentralizedMessage(
-        mensagem: 'Erro inesperado', icone: Icons.error);
+        mensagem: unknownErrorMessage, icone: Icons.error);
   }
 }
