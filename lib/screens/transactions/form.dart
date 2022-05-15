@@ -9,6 +9,7 @@ import 'package:bytebank/models/contact.dart';
 import 'package:bytebank/models/transaction.dart';
 import 'package:bytebank/texts.dart';
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 
 class TransactionForm extends StatefulWidget {
   final Contact contact;
@@ -24,6 +25,7 @@ class TransactionForm extends StatefulWidget {
 class TransactionFormState extends State<TransactionForm> {
   final TextEditingController _valueController = TextEditingController();
   final TransactionWebClient _webClient = TransactionWebClient();
+  final String transactionId = Uuid().v4();
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +99,7 @@ class TransactionFormState extends State<TransactionForm> {
       return;
     }
     final Transaction transaction = await _webClient
-        .save(Transaction(value, widget.contact), password)
+        .save(Transaction(value, widget.contact, transactionId), password)
         .catchError((e) => _showFailureDialog(context, message: couldNotContactTheServer), test: (e) => e is TimeoutException)
         .catchError((e) => _showFailureDialog(context, message: authenticationError), test: (e) => e is Unauthorized)
         .catchError((e) => _showFailureDialog(context, message: transactionShouldHaveValue), test: (e) => e is BadRequest)

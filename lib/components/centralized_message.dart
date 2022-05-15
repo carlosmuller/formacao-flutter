@@ -1,3 +1,4 @@
+import 'package:bytebank/texts.dart';
 import 'package:flutter/material.dart';
 
 class CentralizedMessage extends StatelessWidget {
