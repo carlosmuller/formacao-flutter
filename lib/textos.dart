@@ -21,3 +21,6 @@ const rotuloCampoValor = 'Valor';
 const dicaCampoValor = '0.00';
 
 const confirmar = 'Confirmar';
+
+//transferencia lista
+const textoSemTransferencia = "Sem tranferencias";

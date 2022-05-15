@@ -1,4 +1,5 @@
 import 'package:bytebank/components/carregando.dart';
+import 'package:bytebank/components/mensagem_centralizada.dart';
 import 'package:bytebank/dao/transferencia_dao.dart';
 import 'package:bytebank/http/cliente_web.dart';
 import 'package:bytebank/models/transferencia.dart';
@@ -34,20 +35,32 @@ class ListaTransferenciaState extends State<ListaTransferencia> {
             case ConnectionState.none:
               break;
             case ConnectionState.waiting:
-              return Carregando();
+              return const Carregando();
             case ConnectionState.active:
               break;
             case ConnectionState.done:
-              final List<Transferencia> transferencias = snapshot.data?? List.empty();
-              return ListView.builder(
-                itemCount: transferencias.length,
-                itemBuilder: (context, indice) {
-                  final transferencia = transferencias[indice];
-                  return ItemTransferencia(transferencia);
-                },
+              if( snapshot.hasData){
+                final List<Transferencia> transferencias = snapshot.data?? List.empty();
+                if(transferencias.isEmpty){
+                  return const MensagemCentralizada(
+                      mensagem: textoSemTransferencia,
+                      icone: Icons.warning,
+                  );
+                }
+                return ListView.builder(
+                  itemCount: transferencias.length,
+                  itemBuilder: (context, indice) {
+                    final transferencia = transferencias[indice];
+                    return ItemTransferencia(transferencia);
+                  },
+                );
+              }
+              return const MensagemCentralizada(
+                mensagem: textoSemTransferencia,
+                icone: Icons.warning,
               );
           }
-          return Text('deu ruim');
+          return MensagemErroInesperado();
         },
       ),
       // floatingActionButton: FloatingActionButton(

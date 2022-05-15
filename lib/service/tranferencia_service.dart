@@ -7,7 +7,7 @@ import 'package:http/http.dart';
 class TransferenciaService{
   final Cliente _cliente = Cliente();
   Future<List<Transferencia>> listaTransacoes() async{
-    final Response  response= await _cliente.get('http://192.168.15.13:8080/transactions');
+    final Response  response= await _cliente.get('/transactions');
     return (jsonDecode(response.body) as List)
         .map((item) => Transferencia.doJson(item)).toList(growable: false);
   }
