@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:bytebank/exceptions/custom_exceptions.dart';
+import 'package:bytebank/texts.dart';
 import 'package:bytebank/http/web_client.dart';
 import 'package:bytebank/models/transaction.dart';
 import 'package:http/http.dart';
@@ -27,6 +28,16 @@ class TransactionWebClient{
     if(response.statusCode == 200){
       return Transaction.fromJson(jsonDecode(response.body));
     }
-    throw HttpStatusExceptionMapper[response.statusCode]?? Exception('Status code not expected ${response.statusCode}');
+    final statusCode = response.statusCode;
+    throw httpStatusExceptionMapper[statusCode] ?? Exception(unknownErrorMessage);
   }
+
+
+
+  final Map<int, HttpException>  httpStatusExceptionMapper = {
+    400: HttpBadRequestException(transactionShouldHaveValue),
+    401: HttpUnauthorizedException(authenticationError),
+    409: HttpConflictException(transactionAlreadyExists)
+  };
+
 }

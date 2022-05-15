@@ -1,16 +1,22 @@
 
+class HttpException implements Exception{}
 
-class Unauthorized implements Exception{
+class HttpUnauthorizedException implements HttpException{
+  final String message;
 
+  HttpUnauthorizedException(this.message);
 }
 
-class BadRequest implements Exception{}
+class HttpBadRequestException implements HttpException{
+  final String message;
 
-class Conflict implements Exception{}
+  HttpBadRequestException(this.message);
+}
 
-final HttpStatusExceptionMapper = {
-  400: BadRequest(),
-  401: Unauthorized(),
-  409: Conflict()
-};
+class HttpConflictException implements HttpException{
+  final String message;
+
+  HttpConflictException(this.message);
+}
+
 

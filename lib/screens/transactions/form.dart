@@ -102,9 +102,7 @@ class TransactionFormState extends State<TransactionForm> {
     final Transaction transaction = await _webClient
         .save(Transaction(value, widget.contact, transactionId), password)
         .catchError((e) => _showFailureDialog(context, message: couldNotContactTheServer), test: (e) => e is TimeoutException)
-        .catchError((e) => _showFailureDialog(context, message: authenticationError), test: (e) => e is Unauthorized)
-        .catchError((e) => _showFailureDialog(context, message: transactionShouldHaveValue), test: (e) => e is BadRequest)
-        .catchError((e) => _showFailureDialog(context, message: transactionAlreadyExists), test: (e) => e is Conflict)
+        .catchError((e) => _showFailureDialog(context, message: e.message), test: (e) => e is HttpException)
         .catchError((e) => _showFailureDialog(context), test: (e) => e is Exception);
 
 
@@ -119,7 +117,7 @@ class TransactionFormState extends State<TransactionForm> {
   }
 
   Future _showFailureDialog(BuildContext context, {String message = unknownErrorMessage}) async {
-    return  await showDialog(
+    await showDialog(
         context: context,
         builder: (contextDialog) {
           return FailureDialog(message);
