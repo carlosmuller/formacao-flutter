@@ -1,5 +1,5 @@
 name: bytebank
-description: A new Flutter project.
+description: app de estudos com base nos cursos da formação de flutter da alura
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.

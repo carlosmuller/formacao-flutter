@@ -7,8 +7,7 @@ class Transaction {
 
   static const _jsonValueField = 'value';
   static const _jsonContactField = 'contact';
-  static const _jsonContactNameField = 'name';
-  static const _jsonContactAccountNumberField = 'accountNumber';
+
 
   Transaction(this._value, this._contact, [this._id]);
 
@@ -27,23 +26,12 @@ class Transaction {
     return 'Transferencia{_valor: $_value, contato: $_contact, _id: $_id}';
   }
 
-  static Transaction fromJson(transactionJson) {
-    final value = transactionJson[_jsonValueField];
-    final contactJson = transactionJson[_jsonContactField];
-    return Transaction(
-        value,
-        Contact(contactJson[_jsonContactNameField],
-            contactJson[_jsonContactAccountNumberField])
-    );
-  }
+  Transaction.fromJson(Map<String, dynamic> transactionJson):
+    _value = transactionJson[_jsonValueField],
+    _contact = Contact.fromJson(transactionJson[_jsonContactField]);
 
-  Map<String, dynamic> toJson() {
-    return {
+  Map<String, dynamic> toJson() => {
       _jsonValueField: value,
-      _jsonContactField: {
-        _jsonContactNameField: _contact.name,
-        _jsonContactAccountNumberField: _contact.accountNumber
-      }
+      _jsonContactField: _contact.toJson()
     };
-  }
 }

@@ -1,4 +1,8 @@
 class Contact{
+  static const _jsonIdField = 'id';
+  static const _jsonNameField = 'name';
+  static const _jsonAccountNumberField = 'accountNumber';
+
   final String _name;
   final int _accountNumber;
   int? _id;
@@ -19,4 +23,17 @@ class Contact{
   String toString() {
     return 'Contato{_nome: $_name, _numeroDaConta: $_accountNumber}';
   }
+
+  Map<String, dynamic> toJson() => {
+      _jsonNameField: _name,
+      _jsonAccountNumberField: _accountNumber
+    };
+
+
+  Contact.fromJson(Map<String, dynamic> json):
+    _id= json[_jsonIdField],
+    _name= json[_jsonNameField],
+    _accountNumber= json[_jsonAccountNumberField];
+
+
 }
