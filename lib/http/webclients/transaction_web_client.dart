@@ -18,7 +18,7 @@ class TransactionWebClient{
         .toList(growable: false);
   }
 
-  Future<Transaction> save(Transaction transaction, String password) async{
+  Future<Transaction?> save(Transaction transaction, String password) async{
     final Response response = await _client.post(_endpoint,
         body: jsonEncode(transaction.toJson()),
         customHeaders: {
@@ -29,12 +29,12 @@ class TransactionWebClient{
       return Transaction.fromJson(jsonDecode(response.body));
     }
     final statusCode = response.statusCode;
-    throw httpStatusExceptionMapper[statusCode] ?? Exception(unknownErrorMessage);
+    throw _httpStatusExceptionMapper[statusCode] ?? Exception(unknownErrorMessage);
   }
 
 
 
-  final Map<int, HttpException>  httpStatusExceptionMapper = {
+  final Map<int, HttpException>  _httpStatusExceptionMapper = {
     400: HttpBadRequestException(transactionShouldHaveValue),
     401: HttpUnauthorizedException(authenticationError),
     409: HttpConflictException(transactionAlreadyExists)

@@ -1,6 +1,5 @@
 import 'dart:async';
 
-
 import 'package:bytebank/components/editor.dart';
 import 'package:bytebank/components/loading.dart';
 import 'package:bytebank/components/reponse_dialog.dart';
@@ -10,8 +9,8 @@ import 'package:bytebank/http/webclients/transaction_web_client.dart';
 import 'package:bytebank/models/contact.dart';
 import 'package:bytebank/models/transaction.dart';
 import 'package:bytebank/texts.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
-
 import 'package:uuid/uuid.dart';
 
 class TransactionForm extends StatefulWidget {
@@ -30,6 +29,7 @@ class TransactionFormState extends State<TransactionForm> {
   final TransactionWebClient _webClient = TransactionWebClient();
   final String transactionId = Uuid().v4();
   bool _sending = false;
+
   @override
   Widget build(BuildContext context) {
     print('Transação id: $transactionId');
@@ -109,38 +109,44 @@ class TransactionFormState extends State<TransactionForm> {
           .showSnackBar(SnackBar(content: Text(transactionShouldHaveValue)));
       return;
     }
-
-    final Transaction transaction = await _send(value, password)
-        .whenComplete(() => setState(() => _sending = false));
-
+    setState(() => _sending = true);
+    final newTransaction = Transaction(value, widget.contact, transactionId);
+    final Transaction? transaction = await _webClient
+        .save(Transaction(value, widget.contact, transactionId), password)
+        .catchError(
+      (error, stacktrace) async {
+        await _showErrorDialog(error, context, error.message, newTransaction, stacktrace);
+      },
+      test: (e) => e is HttpException,
+    ).catchError(
+      (error, stacktrace) async {
+        await _showErrorDialog(error, context, couldNotContactTheServer, newTransaction, stacktrace);
+      },
+      test: (e) => e is TimeoutException,
+    ).catchError(
+      (error, stacktrace) async {
+        await _showErrorDialog(error, context, unknownErrorMessage, newTransaction, stacktrace);
+      },
+      test: (e) => e is Exception,
+    ).whenComplete(() => setState(() => _sending = false));
     if (transaction != null) {
       await showDialog(
           context: context,
           builder: (contextDialog) {
             return SuccessDialog(succesOnCreate);
           });
-
       Navigator.of(context).pop();
     }
   }
 
-  Future<Transaction> _send(value, password){
-    setState(() {
-      _sending = true;
-    });
-    return  _webClient
-        .save(Transaction(value, widget.contact, transactionId), password)
-        .catchError((e) => _showFailureDialog(context, message: couldNotContactTheServer), test: (e) => e is TimeoutException)
-        .catchError((e) => _showFailureDialog(context, message: e.message), test: (e) => e is HttpException)
-        .catchError((e) => _showFailureDialog(context), test: (e) => e is Exception);
-  }
-
-  Future _showFailureDialog(BuildContext context, {String message = unknownErrorMessage}) async {
+  Future<void> _showErrorDialog(
+      error, BuildContext context, String message, Transaction transaction, stack) async {
+    await FirebaseCrashlytics.instance.setCustomKey('http_body', transaction.toJson().toString());
+    await FirebaseCrashlytics.instance.recordError(error, stack);
     await showDialog(
         context: context,
         builder: (contextDialog) {
           return FailureDialog(message);
-    });
-    return null;
+        });
   }
 }
