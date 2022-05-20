@@ -9,12 +9,19 @@ class Transferencias extends ChangeNotifier{
 
   get length => _transferencias.length;
 
+  bool get vazia => _transferencias.isEmpty;
+
   void adiciona(Transferencia transferencia){
     _transferencias.add(transferencia);
     notifyListeners();
   }
 
   Transferencia get(int indice) => _transferencias[indice];
+
+  getReversed(int indice) {
+    int indiceReverso = length - 1 - indice;
+    return get(indiceReverso);
+  }
 
 
 }
