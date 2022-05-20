@@ -1,11 +1,13 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:bytebank/components/theme.dart';
-import 'package:bytebank/screens/counter.dart';
 import 'package:bytebank/screens/dashboard/dashboard.dart';
+import 'package:bytebank/screens/name.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 
 import 'firebase_options.dart';
 
@@ -20,8 +22,18 @@ void main() async {
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
     await FirebaseCrashlytics.instance.setUserIdentifier("identificador");
   }
+  
+  BlocOverrides.runZoned(() {
+    runApp(BytebankApp());
+  }, blocObserver: LogObserver());
+}
 
-  runApp(BytebankApp());
+class LogObserver extends BlocObserver {
+  @override
+  void onChange(BlocBase bloc, Change change) {
+    debugPrint('${bloc.runtimeType} > $change');
+    super.onChange(bloc, change);
+  }
 }
 
 class BytebankApp extends StatelessWidget {
@@ -31,7 +43,7 @@ class BytebankApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: byteBankTheme,
-      home: CounterContainer(),
+      home: Dashboard(),
     );
   }
 }

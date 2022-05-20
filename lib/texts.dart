@@ -40,3 +40,7 @@ const authDialogTitle = 'Autenticar';
 const confirm= 'confirm';
 const cancel= 'cancel';
 
+//ChangeName
+const titleAppBarChangeName = "Mudar Nome";
+const desiredName = "Nome desejado:";
+const change = "Trocar nome";
