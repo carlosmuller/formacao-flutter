@@ -41,6 +41,7 @@ class FormularioDeposito extends StatelessWidget {
     if (_validaDeposito(valor)) {
       _atualizaEstado(context, valor!);
       Navigator.of(context).pop();
+      return;
     }
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(

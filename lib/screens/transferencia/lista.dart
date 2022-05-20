@@ -1,51 +1,41 @@
 import 'package:bytebank/models/transferencia.dart';
+import 'package:bytebank/models/transferencias.dart';
 import 'package:bytebank/screens/transferencia/formulario.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 const _tituloAppBar = 'Transferências';
 
-class ListaTransferencias extends StatefulWidget {
-  final List<Transferencia> _transferencias = [];
-
-  @override
-  State<StatefulWidget> createState() {
-    return ListaTransferenciasState();
-  }
-}
-
-class ListaTransferenciasState extends State<ListaTransferencias> {
+class ListaTransferenciasState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(_tituloAppBar),
       ),
-      body: ListView.builder(
-        itemCount: widget._transferencias.length,
-        itemBuilder: (context, indice) {
-          final transferencia = widget._transferencias[indice];
-          return ItemTransferencia(transferencia);
-        },
+      body: Consumer<Transferencias>(
+        builder: (context, Transferencias transferencias, child) => ListView.builder(
+          itemCount: transferencias.length,
+          itemBuilder: (context, indice) {
+            final transferencia = transferencias.get(indice);
+            return ItemTransferencia(transferencia);
+          },
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return FormularioTransferencia();
-          })).then(
-            (transferenciaRecebida) => _atualiza(transferenciaRecebida),
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) {
+                return FormularioTransferencia();
+              },
+            ),
           );
         },
       ),
     );
-  }
-
-  void _atualiza(Transferencia transferenciaRecebida) {
-    if (transferenciaRecebida != null) {
-      setState(() {
-        widget._transferencias.add(transferenciaRecebida);
-      });
-    }
   }
 }
 

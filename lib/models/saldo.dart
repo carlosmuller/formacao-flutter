@@ -20,4 +20,6 @@ class Saldo extends ChangeNotifier{
   String toString() {
     return 'R\$ $_valor';
   }
+
+  bool temSaldoSuficiente(double valor) => valor <= _valor;
 }
