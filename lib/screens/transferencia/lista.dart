@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 
 const _tituloAppBar = 'Transferências';
 
-class ListaTransferenciasState extends StatelessWidget {
+class ListaTransferencias extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -14,7 +14,8 @@ class ListaTransferenciasState extends StatelessWidget {
         title: Text(_tituloAppBar),
       ),
       body: Consumer<Transferencias>(
-        builder: (context, Transferencias transferencias, child) => ListView.builder(
+        builder: (context, Transferencias transferencias, child) =>
+            ListView.builder(
           itemCount: transferencias.length,
           itemBuilder: (context, indice) {
             final transferencia = transferencias.get(indice);
@@ -49,8 +50,8 @@ class ItemTransferencia extends StatelessWidget {
     return Card(
         child: ListTile(
       leading: Icon(Icons.monetization_on),
-      title: Text(_transferencia.valor.toString()),
-      subtitle: Text(_transferencia.numeroConta.toString()),
+      title: Text(_transferencia.valorFormatado()),
+      subtitle: Text(_transferencia.contaFormatada()),
     ));
   }
 }
