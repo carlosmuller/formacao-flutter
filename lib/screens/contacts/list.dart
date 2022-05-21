@@ -1,3 +1,4 @@
+import 'package:bytebank/components/container.dart';
 import 'package:bytebank/components/loading.dart';
 import 'package:bytebank/dao/contact_dao.dart';
 import 'package:bytebank/models/contact.dart';
@@ -5,6 +6,18 @@ import 'package:bytebank/screens/contacts/form.dart';
 import 'package:bytebank/screens/transactions/form.dart';
 import 'package:bytebank/texts.dart';
 import 'package:flutter/material.dart';
+
+
+
+
+class ContactListContainer extends BlocContainer{
+  @override
+  Widget build(BuildContext context) {
+    return ContactList();
+  }
+}
+
+
 
 class ContactList extends StatefulWidget {
   const ContactList({Key? key}) : super(key: key);
@@ -59,7 +72,7 @@ class ContactListState extends State<ContactList> {
             Navigator.push(context, MaterialPageRoute(builder: (context) {
               return ContactForm();
             })).then((newContact) {
-
+              setState((){});
             });
           }),
     );

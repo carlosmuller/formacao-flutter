@@ -1,3 +1,5 @@
+import 'package:bytebank/components/container.dart';
+import 'package:bytebank/models/name.dart';
 import 'package:bytebank/screens/contacts/list.dart';
 import 'package:bytebank/screens/name.dart';
 import 'package:bytebank/screens/transactions/lista.dart';
@@ -5,8 +7,7 @@ import 'package:bytebank/texts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class DashboardContainer extends StatelessWidget {
-  const DashboardContainer({Key? key}) : super(key: key);
+class DashboardContainer extends BlocContainer {
 
   @override
   Widget build(BuildContext context) {
@@ -22,54 +23,55 @@ class DashboardView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<NameCubit, String?>(
-      builder: (context, String? state) {
-        var title = '$dashboardTitle ${state ?? ""}!';
-        return Scaffold(
-          appBar: AppBar(
-            title: Text(title),
+    return Scaffold(
+      appBar: AppBar(
+        title: BlocBuilder<NameCubit, String?>(
+          builder: (context, String? state) {
+            var title = '$dashboardTitle ${state ?? ""}!';
+            return Text(title);
+          },
+        ),
+      ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Image.asset('images/bytebank_logo.png'),
           ),
-          body: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Image.asset('images/bytebank_logo.png'),
-              ),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    _Item(
-                      contactsText,
-                      Icons.monetization_on,
-                      () => _goToContacts(context),
-                    ),
-                    _Item(
-                      transactionListTitle,
-                      Icons.description,
-                      () => _goToTransactionList(context),
-                    ),
-                    _Item(
-                      titleAppBarChangeName,
-                      Icons.person_outline,
-                      () => _showChangeName(context),
-                    ),
-                  ],
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                _Item(
+                  contactsText,
+                  Icons.monetization_on,
+                  () => _goToContacts(context),
                 ),
-              ),
-            ],
+                _Item(
+                  transactionListTitle,
+                  Icons.description,
+                  () => _goToTransactionList(context),
+                ),
+                _Item(
+                  titleAppBarChangeName,
+                  Icons.person_outline,
+                  () => _showChangeName(context),
+                ),
+              ],
+            ),
           ),
-        );
-      },
+        ],
+      ),
     );
   }
 
   _goToContacts(BuildContext blocContext) {
-    Navigator.of(blocContext).push(MaterialPageRoute(builder: (context) {
-      return ContactList();
-    }));
+    // Navigator.of(blocContext).push(MaterialPageRoute(builder: (context) {
+    //   return ContactList();
+    // }));
+    push(blocContext, ContactListContainer());
   }
 
   _goToTransactionList(BuildContext blocContext) {
@@ -91,6 +93,7 @@ class DashboardView extends StatelessWidget {
     );
   }
 }
+
 
 class _Item extends StatelessWidget {
   final Function _onTap;
