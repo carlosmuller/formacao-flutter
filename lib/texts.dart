@@ -1,5 +1,5 @@
 const transactionListTitle = 'Transações';
-const dashboardTitle = 'Dashboard';
+const dashboardTitle = 'Bem vindo';
 const contactListTitle = 'Tranferir';
 const contactsText = contactListTitle;
 

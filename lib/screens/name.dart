@@ -3,13 +3,13 @@ import 'package:bytebank/texts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class NameCubit extends Cubit<String> {
-  NameCubit(String initialState) : super(initialState);
+class NameCubit extends Cubit<String?> {
+  NameCubit(String? initialState) : super(initialState);
 
-  void change(String name) => emit(name);
+  void change(String? name) => emit(name);
 
   @override
-  void onChange(Change<String> change) {
+  void onChange(Change<String?> change) {
     debugPrint('$runtimeType > $change');
     super.onChange(change);
   }
@@ -18,10 +18,7 @@ class NameCubit extends Cubit<String> {
 class NameContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => NameCubit("Fulano"),
-      child: NameView(),
-    );
+    return NameView();
   }
 }
 
