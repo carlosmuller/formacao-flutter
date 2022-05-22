@@ -19,6 +19,7 @@ class TransactionWebClient{
   }
 
   Future<Transaction?> save(Transaction transaction, String password) async{
+    Future.delayed(Duration(seconds: 3));
     final Response response = await _client.post(_endpoint,
         body: jsonEncode(transaction.toJson()),
         customHeaders: {

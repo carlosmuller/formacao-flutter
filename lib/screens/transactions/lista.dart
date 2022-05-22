@@ -41,8 +41,8 @@ class TransactionListState extends State<TransactionList> {
                 final List<Transaction> transactions = snapshot.data?? List.empty();
                 if(transactions.isEmpty){
                   return const CentralizedMessage(
-                      mensagem: noTransactions,
-                      icone: Icons.warning,
+                      message: noTransactions,
+                      icon: Icons.warning,
                   );
                 }
                 return ListView.builder(
@@ -54,8 +54,8 @@ class TransactionListState extends State<TransactionList> {
                 );
               }
               return const CentralizedMessage(
-                mensagem: noTransactions,
-                icone: Icons.warning,
+                message: noTransactions,
+                icon: Icons.warning,
               );
           }
           return UnknownErrorMessage();

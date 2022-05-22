@@ -93,12 +93,9 @@ class ContactList extends StatelessWidget {
                 return _ItemContact(
                   contact,
                   onClick: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return TransactionForm(contact: contact);
-                        },
-                      ),
+                    push(
+                      context,
+                      TransactionFormContainer(contact: contact),
                     );
                   },
                 );
@@ -126,7 +123,7 @@ class ContactList extends StatelessWidget {
   }
 
   void update(BuildContext context) {
-     context.read<ContactListCubit>().reload(dao);
+    context.read<ContactListCubit>().reload(dao);
   }
 }
 

@@ -2,17 +2,17 @@ import 'package:bytebank/texts.dart';
 import 'package:flutter/material.dart';
 
 class CentralizedMessage extends StatelessWidget {
-  final String mensagem;
-  final IconData? icone;
-  final double tamanhoDoIcone;
-  final double tamanhoDaFonte;
+  final String message;
+  final IconData? icon;
+  final double iconSize;
+  final double fontSize;
 
   const CentralizedMessage(
       {Key? key,
-      required this.mensagem,
-      this.icone,
-      this.tamanhoDoIcone = 64,
-      this.tamanhoDaFonte = 24})
+      required this.message,
+      this.icon,
+      this.iconSize = 64,
+      this.fontSize = 24})
       : super(key: key);
 
   @override
@@ -24,16 +24,16 @@ class CentralizedMessage extends StatelessWidget {
         children: [
           Visibility(
             child: Icon(
-              icone,
-              size: tamanhoDoIcone,
+              icon,
+              size: iconSize,
             ),
-            visible: icone != null,
+            visible: icon != null,
           ),
           Padding(
             padding: EdgeInsets.only(top: 24.0),
             child: Text(
-              mensagem,
-              style: TextStyle(fontSize: tamanhoDaFonte),
+              message,
+              style: TextStyle(fontSize: fontSize),
             ),
           ),
         ],
@@ -46,6 +46,6 @@ class UnknownErrorMessage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const CentralizedMessage(
-        mensagem: unknownErrorMessage, icone: Icons.error);
+        message: unknownErrorMessage, icon: Icons.error);
   }
 }
