@@ -67,7 +67,7 @@ class ContactListContainer extends BlocContainer {
   }
 }
 
-class ContactList extends StatelessWidget /*extends State<ContactList>*/ {
+class ContactList extends StatelessWidget {
   final ContactDao dao;
 
   const ContactList({Key? key, required this.dao}) : super(key: key);
