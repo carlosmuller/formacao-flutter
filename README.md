@@ -7,7 +7,9 @@ Projeto utilizado para estudo durante a [formação Flutter da Alura](https://ww
 - [avançando nos conceitos de comunicação http, evitando enviar mais de uma vez a mesma transação, diálogos e passando cabeçalho de senha, tratamento de exceções](https://github.com/carlosmuller/formacao-flutter/compare/v1.3-flutter-web-api...v1.4-flutter-comunicacao-http)
 - [enviando exceções para o crashlytics](https://github.com/carlosmuller/formacao-flutter/compare/v1.4-flutter-comunicacao-http...v1.5-flutter-firebase-crashlytics-relatorios-tempo-real)
 - [voltando o projeto para um versão mais básica para parender mais sobre gerenciamento de estados com o Provider](https://github.com/carlosmuller/formacao-flutter/releases/tag/v1.6-flutter-gerenciamento-estados-provider)
+- [usando bloc para genrenciar os estados da tela](https://github.com/carlosmuller/formacao-flutter/compare/v1.6-flutter-gerenciamento-estados-provider...v1.7-flutter-bloc), todo: quando mostrar o erro voltar para a tela de criar transferencia
 
 ## Pontos de melhora
 - [ ] Está dando problema de overflow da tela ao voltar para o dashboard com algum teclado aberto
 - [ ] Preciso retornar uma lista vazia nos erros da lista de transações
+- [ ] Quando dá erro na criação de transferencia versão com bloc não volta para o form 
