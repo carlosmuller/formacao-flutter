@@ -14,6 +14,7 @@ const authenticationError = 'Senha errada';
 const couldNotContactTheServer = 'Não consegui me comunicar com o servidor';
 const unknownErrorMessage = 'Erro desconhecido';
 const error = 'Erro';
+const back = 'Voltar';
 
 // Formulario contatos
 const contactFormTitle = 'Novo Contato';

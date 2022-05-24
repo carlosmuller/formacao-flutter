@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 
 class ErrorView extends StatelessWidget {
   final String _message;
-
-  const ErrorView(this._message);
+  final Function? _action;
+  const ErrorView(this._message, this._action);
 
   @override
   Widget build(BuildContext context) {
@@ -13,9 +13,20 @@ class ErrorView extends StatelessWidget {
       appBar: AppBar(
         title: Text(error),
       ),
-      body: CentralizedMessage(
-        message: _message,
-        icon: Icons.error,
+      body: Column(
+        children: [
+          CentralizedMessage(
+            message: _message,
+            icon: Icons.error,
+          ),
+          Visibility(
+              child: ElevatedButton(
+                onPressed: () => _action!(),
+                child: Text(back),
+              ),
+            visible: _action != null,
+          )
+        ],
       ),
     );
   }

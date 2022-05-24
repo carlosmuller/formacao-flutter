@@ -22,7 +22,9 @@ abstract class TransactionFormState {
 
 @immutable
 class ShowFormState extends TransactionFormState {
-  const ShowFormState();
+  final double? value;
+  const ShowFormState({this.value});
+
 }
 
 @immutable
@@ -52,6 +54,7 @@ class FatalErrorTransactionFormState extends TransactionFormState {
   Transaction get transaction => _transaction;
 
   get error => _error;
+
 }
 
 class TransactionFormCubit extends Cubit<TransactionFormState> {
@@ -118,7 +121,7 @@ class TransactionForm extends StatelessWidget {
     return BlocBuilder<TransactionFormCubit, TransactionFormState>(
       builder: (context, TransactionFormState state) {
         if (state is ShowFormState) {
-          return _BasicForm(_contact);
+          return _BasicForm(_contact, value: state.value);
         }
         if (state is SendingFormState || state is SentFormState) {
           return ProgressView(
@@ -129,8 +132,10 @@ class TransactionForm extends StatelessWidget {
         if (state is FatalErrorTransactionFormState) {
           sendToFireBase({'http_body': state.transaction.toJson().toString()},
               state.error, state.stacktrace);
-          // _showErrorDialog(context,state.message);
-          return ErrorView(state.message);
+          return ErrorView(state.message, (){
+
+            context.read<TransactionFormCubit>().emit(ShowFormState(value: state.transaction.value));
+          });
         }
         return _BasicForm(_contact);
       },
@@ -143,10 +148,15 @@ class _BasicForm extends StatelessWidget {
   final String transactionId = Uuid().v4();
   final Contact _contact;
 
-  _BasicForm(this._contact, {Key? key}) : super(key: key);
+  final double? value;
+
+  _BasicForm(this._contact, {Key? key, this.value}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    if(value != null){
+      _valueController.value = TextEditingValue(text: value.toString());
+    }
     return Scaffold(
       appBar: AppBar(
         title: const Text(transactionFormTitle),
