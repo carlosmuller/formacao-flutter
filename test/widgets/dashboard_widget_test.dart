@@ -1,7 +1,13 @@
+import 'package:bytebank/dao/contact_dao.dart';
 import 'package:bytebank/screens/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 
+import 'dashboard_widget_test.mocks.dart';
+import '../matchers/matchers.dart';
+
+@GenerateMocks([ContactDao])
 void main() {
   testWidgets(
     'Should display logo when the dashboard is opened',
@@ -72,20 +78,14 @@ void main() {
     (WidgetTester widgetTester) async {
       await widgetTester.pumpWidget(
         MaterialApp(
-          home: DashboardContainer(),
-        ),
+          home: DashboardContainer()),
+
       );
       final changeNameFeatureItem = find.byWidgetPredicate(
-            (widget) => featureItemMatcher(widget, 'Mudar Nome', Icons.person_outline),
+        (widget) =>
+            featureItemMatcher(widget, 'Mudar Nome', Icons.person_outline),
       );
       expect(changeNameFeatureItem, findsOneWidget);
     },
   );
-}
-
-bool featureItemMatcher(Widget widget, String name, IconData icon) {
-  if (widget is FeatureItem) {
-    return widget.name == name && widget.icon == icon;
-  }
-  return false;
 }

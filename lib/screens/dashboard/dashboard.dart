@@ -78,10 +78,10 @@ class DashboardView extends StatelessWidget {
   }
 
   _goToContacts(BuildContext blocContext) {
-    // Navigator.of(blocContext).push(MaterialPageRoute(builder: (context) {
-    //   return ContactList();
-    // }));
-    push(blocContext, ContactListContainer());
+    push(
+      blocContext,
+      ContactListContainer(),
+    );
   }
 
   _goToTransactionList(BuildContext blocContext) {
@@ -112,8 +112,8 @@ class FeatureItem extends StatelessWidget {
   const FeatureItem(this._name, this._icon, this._onTap, {Key? key})
       : super(key: key);
 
-
   String get name => _name;
+
   IconData get icon => _icon;
 
   @override
@@ -149,6 +149,4 @@ class FeatureItem extends StatelessWidget {
       ),
     );
   }
-
-
 }

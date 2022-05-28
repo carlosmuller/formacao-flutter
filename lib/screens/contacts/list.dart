@@ -5,6 +5,7 @@ import 'package:bytebank/models/contact.dart';
 import 'package:bytebank/screens/contacts/form.dart';
 import 'package:bytebank/screens/transactions/form.dart';
 import 'package:bytebank/texts.dart';
+import 'package:bytebank/widgets/app_dependencies.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -41,36 +42,38 @@ class LoadedContactsListState extends ContactListState {
 
 class ContactListCubit extends Cubit<ContactListState> {
   ContactListCubit() : super(InitContactListState());
-
-  void reload(ContactDao dao) async {
+  Future<void> reload(ContactDao dao) async {
     emit(LoadingContactsListState());
-    await Future.delayed(Duration(seconds: 1));
-    dao.listAll().onError((error, stackTrace) {
+    final contacts = await dao.listAll().onError((error, stackTrace) {
       emit(FatalErrorContactsListState());
       return List.empty();
-    }).then((contacts) => emit(LoadedContactsListState(contacts)));
+    });
+    emit(LoadedContactsListState(contacts));
   }
 }
 
 class ContactListContainer extends BlocContainer {
+
+
+  ContactListContainer();
+
   @override
   Widget build(BuildContext context) {
-    final ContactDao dao = ContactDao();
+    final contactDao = AppDependencies.of(context)!.contactDao;
     return BlocProvider<ContactListCubit>(
       create: (BuildContext context) {
         final cubit = ContactListCubit();
-        cubit.reload(dao);
+        cubit.reload(contactDao);
         return cubit;
       },
-      child: ContactList(dao: dao),
+      child: ContactList(),
     );
   }
 }
 
 class ContactList extends StatelessWidget {
-  final ContactDao dao;
 
-  const ContactList({Key? key, required this.dao}) : super(key: key);
+  const ContactList({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -90,7 +93,7 @@ class ContactList extends StatelessWidget {
               itemCount: contacts.length,
               itemBuilder: (context, index) {
                 final contact = contacts[index];
-                return _ItemContact(
+                return ContactItem(
                   contact,
                   onClick: () {
                     push(
@@ -116,22 +119,27 @@ class ContactList extends StatelessWidget {
               },
             ),
           );
-          update(context);
+          print('salvei contato');
+          await update(context);
         },
       ),
     );
   }
 
-  void update(BuildContext context) {
-    context.read<ContactListCubit>().reload(dao);
+  Future<void> update(BuildContext context) async{
+    final contactDao = AppDependencies.of(context)!.contactDao;
+    await context.read<ContactListCubit>().reload(contactDao);
   }
 }
 
-class _ItemContact extends StatelessWidget {
+class ContactItem extends StatelessWidget {
   final Contact _contact;
   final Function onClick;
 
-  const _ItemContact(this._contact, {required this.onClick});
+  const ContactItem(this._contact, {required this.onClick});
+
+  String get contactName => _contact.name;
+  int get contactAccountNumber => _contact.accountNumber;
 
   @override
   Widget build(BuildContext context) {

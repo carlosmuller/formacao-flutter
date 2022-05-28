@@ -11,6 +11,7 @@ import 'package:bytebank/infra/firebaseHelper.dart';
 import 'package:bytebank/models/contact.dart';
 import 'package:bytebank/models/transaction.dart';
 import 'package:bytebank/texts.dart';
+import 'package:bytebank/widgets/app_dependencies.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uuid/uuid.dart';
@@ -23,8 +24,8 @@ abstract class TransactionFormState {
 @immutable
 class ShowFormState extends TransactionFormState {
   final double? value;
-  const ShowFormState({this.value});
 
+  const ShowFormState({this.value});
 }
 
 @immutable
@@ -54,16 +55,15 @@ class FatalErrorTransactionFormState extends TransactionFormState {
   Transaction get transaction => _transaction;
 
   get error => _error;
-
 }
 
 class TransactionFormCubit extends Cubit<TransactionFormState> {
   TransactionFormCubit(TransactionFormState initialState)
       : super(ShowFormState());
 
-  void save(Transaction newTransaction, String password) async {
+  void save(Transaction newTransaction, String password, TransactionWebClient client) async {
     emit(SendingFormState());
-    await TransactionWebClient()
+    await client
         .save(newTransaction, password)
         .then((value) => emit(SentFormState()))
         .catchError(
@@ -95,19 +95,19 @@ class TransactionFormContainer extends BlocContainer {
 
   @override
   Widget build(BuildContext context) {
-    // ,
     return BlocProvider<TransactionFormCubit>(
-        create: (_) => TransactionFormCubit(ShowFormState()),
-        child: BlocListener<TransactionFormCubit, TransactionFormState>(
-          listener: (context, state) {
-            if (state is SentFormState) {
-              Navigator.pop(context);
-            }
-          },
-          listenWhen: (oldState, newState) =>
-              oldState is SendingFormState && newState is SentFormState,
-          child: TransactionForm(contact),
-        ));
+      create: (_) => TransactionFormCubit(ShowFormState()),
+      child: BlocListener<TransactionFormCubit, TransactionFormState>(
+        listener: (context, state) {
+          if (state is SentFormState) {
+            Navigator.pop(context);
+          }
+        },
+        listenWhen: (oldState, newState) =>
+            oldState is SendingFormState && newState is SentFormState,
+        child: TransactionForm(contact),
+      ),
+    );
   }
 }
 
@@ -132,9 +132,10 @@ class TransactionForm extends StatelessWidget {
         if (state is FatalErrorTransactionFormState) {
           sendToFireBase({'http_body': state.transaction.toJson().toString()},
               state.error, state.stacktrace);
-          return ErrorView(state.message, (){
-
-            context.read<TransactionFormCubit>().emit(ShowFormState(value: state.transaction.value));
+          return ErrorView(state.message, () {
+            context
+                .read<TransactionFormCubit>()
+                .emit(ShowFormState(value: state.transaction.value));
           });
         }
         return _BasicForm(_contact);
@@ -154,7 +155,7 @@ class _BasicForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if(value != null){
+    if (value != null) {
       _valueController.value = TextEditingValue(text: value.toString());
     }
     return Scaffold(
@@ -215,9 +216,9 @@ class _BasicForm extends StatelessWidget {
                             }
                             final newTransaction =
                                 Transaction(value, _contact, transactionId);
-
+                            final transactionWebClient = AppDependencies.of(context)!.transactionWebClient;
                             BlocProvider.of<TransactionFormCubit>(context)
-                                .save(newTransaction, password);
+                                .save(newTransaction, password, transactionWebClient);
                             // _saveTransaction(context, password);
                           },
                         ),

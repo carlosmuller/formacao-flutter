@@ -3,9 +3,11 @@ import 'package:bytebank/components/styles.dart';
 import 'package:bytebank/dao/contact_dao.dart';
 import 'package:bytebank/models/contact.dart';
 import 'package:bytebank/texts.dart';
+import 'package:bytebank/widgets/app_dependencies.dart';
 import 'package:flutter/material.dart';
 
 class ContactForm extends StatefulWidget {
+
   const ContactForm({Key? key}) : super(key: key);
 
   @override
@@ -15,11 +17,11 @@ class ContactForm extends StatefulWidget {
 }
 
 class ContactFormState extends State<ContactForm> {
-  final ContactDao _dao = ContactDao();
-
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _accountNumberController =
       TextEditingController();
+
+  ContactFormState();
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +53,7 @@ class ContactFormState extends State<ContactForm> {
                   width: double.maxFinite,
                   child: ElevatedButton(
                     child: Text(createContact),
-                    onPressed: () {
+                    onPressed: () async {
                       final String? name = _nameController.text;
                       final int? accountNumber =
                           int.tryParse(_accountNumberController.text);
@@ -61,10 +63,11 @@ class ContactFormState extends State<ContactForm> {
                         return;
                       }
                       final contact = Contact(name, accountNumber);
-                      _dao.save(contact).then((id) {
+                      final contactDao = AppDependencies.of(context)!.contactDao;
+                      await contactDao.save(contact).then((id) {
                         contact.id = id;
-                        Navigator.pop(context, contact);
                       });
+                      Navigator.pop(context);
                     },
                     style: positivePrimaryAction(context),
                   ),

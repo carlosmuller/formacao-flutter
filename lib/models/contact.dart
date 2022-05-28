@@ -35,5 +35,14 @@ class Contact{
     _name= json[_jsonNameField],
     _accountNumber= json[_jsonAccountNumberField];
 
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Contact &&
+          runtimeType == other.runtimeType &&
+          _name == other._name &&
+          _accountNumber == other._accountNumber;
 
+  @override
+  int get hashCode => _name.hashCode ^ _accountNumber.hashCode ;
 }
