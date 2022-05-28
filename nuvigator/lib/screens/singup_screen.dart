@@ -95,9 +95,9 @@ class SingupScreen extends StatelessWidget {
                   vertical: 10,
                 ),
                 child: GestureDetector(
-                  onTap: () => Navigator.push(
+                  onTap: () => Navigator.pushNamed(
                     context,
-                    MaterialPageRoute(builder: (context) => LoginScreen()),
+                    'login',
                   ),
                   child: Container(
                     width: double.maxFinite,

@@ -34,45 +34,45 @@ class MenuScreen extends StatelessWidget {
               OrgsMenuCard(
                 text: 'Início',
                 icon: Icons.home,
-                action: () => Navigator.push(
+                action: () => Navigator.pushNamed(
                   context,
-                  MaterialPageRoute(builder: (context) => HomeScreen()),
+                  'home',
                 ),
               ),
               Divider(),
               OrgsMenuCard(
                 text: 'Favoritos',
                 icon: Icons.favorite,
-                action: () => Navigator.push(
+                action: () => Navigator.pushNamed(
                   context,
-                  MaterialPageRoute(builder: (context) => FavoritesScreen()),
+                  'favorites',
                 ),
               ),
               Divider(),
               OrgsMenuCard(
                 text: 'Perfil',
                 icon: Icons.person,
-                action: () => Navigator.push(
+                action: () => Navigator.pushNamed(
                   context,
-                  MaterialPageRoute(builder: (context) => ProfileScreen()),
+                  'profile',
                 ),
               ),
               Divider(),
               OrgsMenuCard(
                 text: 'Métodos de pagamento',
                 icon: Icons.credit_card,
-                action: () => Navigator.push(
+                action: () => Navigator.pushNamed(
                   context,
-                  MaterialPageRoute(builder: (context) => PaymentScreen()),
+                  'payment',
                 ),
               ),
               Divider(),
               OrgsMenuCard(
                 text: 'Sair',
                 icon: Icons.logout,
-                action: () => Navigator.pushAndRemoveUntil(
+                action: () => Navigator.pushNamedAndRemoveUntil(
                   context,
-                  MaterialPageRoute(builder: (context) => LoginScreen()),
+                  'login',
                   (route) => false
                 ),
               ),

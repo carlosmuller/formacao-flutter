@@ -140,9 +140,10 @@ class _HomeScreenState extends State<HomeScreen> {
       final prod = Producer.fromJson(producers[producer]);
 
       children.add(OrgsStoresCard(
-        action: () => Navigator.push(
+        action: () => Navigator.pushNamed(
           context,
-          MaterialPageRoute(builder: (context) => ProducerDetailsScreen(producer: prod)),
+          'producer-details',
+          arguments: prod,
         ),
         img: prod.logo,
         distance: prod.distance,

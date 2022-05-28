@@ -27,9 +27,9 @@ class RouterGenerator {
             : _errorRoute('argument expected to be a Producer but it was ${args.runtimeType}'),
       ),
       'package-details': MaterialPageRoute(
-        builder: (_) => args is Package
-            ? PackageDetailsScreen(package: args)
-            : _errorRoute('argument expected to be a Package but it was ${args.runtimeType}'),
+        builder: (_) => args is Map && args['package'] is Package && args['producer'] is Producer
+            ? PackageDetailsScreen(package: args['package'], producer: args['producer'],)
+            : _errorRoute('argument expected to have package and producer'),
       ),
     };
     return routes[settings.name]??_errorRoute();
