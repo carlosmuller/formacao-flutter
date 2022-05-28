@@ -3,6 +3,7 @@ import 'package:bytebank/components/centralized_message.dart';
 import 'package:bytebank/models/transaction.dart';
 import 'package:bytebank/http/webclients/transaction_web_client.dart';
 import 'package:bytebank/texts.dart';
+import 'package:bytebank/widgets/app_dependencies.dart';
 import 'package:flutter/material.dart';
 
 class TransactionList extends StatefulWidget {
@@ -16,17 +17,17 @@ class TransactionList extends StatefulWidget {
 }
 
 class TransactionListState extends State<TransactionList> {
-  final TransactionWebClient webClient = TransactionWebClient();
 
   @override
   Widget build(BuildContext context) {
+    final transactionWebClient = AppDependencies.of(context)!.transactionWebClient;
     return Scaffold(
       appBar: AppBar(
         title: Text(transactionListTitle),
       ),
       body:FutureBuilder<List<Transaction>>(
         initialData: List.empty(growable: false),
-        future: webClient.listAll(),
+        future: transactionWebClient.listAll(),
         builder: (context, snapshot) {
           //conteudo retornado da future
           switch (snapshot.connectionState) {
