@@ -29,7 +29,7 @@ class RouterGenerator {
       'package-details': MaterialPageRoute(
         builder: (_) => args is Map && args['package'] is Package && args['producer'] is Producer
             ? PackageDetailsScreen(package: args['package'], producer: args['producer'],)
-            : _errorRoute('argument expected to have package and producer'),
+            : _errorRoute('argument expected to have package and producer $args'),
       ),
     };
     return routes[settings.name]??_errorRoute();
