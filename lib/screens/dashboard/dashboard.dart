@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DashboardContainer extends BlocContainer {
-
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -32,37 +31,48 @@ class DashboardView extends StatelessWidget {
           },
         ),
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Image.asset('images/bytebank_logo.png'),
-          ),
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: [
-                _Item(
-                  contactsText,
-                  Icons.monetization_on,
-                  () => _goToContacts(context),
-                ),
-                _Item(
-                  transactionListTitle,
-                  Icons.description,
-                  () => _goToTransactionList(context),
-                ),
-                _Item(
-                  titleAppBarChangeName,
-                  Icons.person_outline,
-                  () => _showChangeName(context),
-                ),
-              ],
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          return SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minHeight: constraints.maxHeight,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Image.asset('images/bytebank_logo.png'),
+                  ),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        FeatureItem(
+                          contactsText,
+                          Icons.monetization_on,
+                          () => _goToContacts(context),
+                        ),
+                        FeatureItem(
+                          transactionListTitle,
+                          Icons.description,
+                          () => _goToTransactionList(context),
+                        ),
+                        FeatureItem(
+                          titleAppBarChangeName,
+                          Icons.person_outline,
+                          () => _showChangeName(context),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          );
+        },
       ),
     );
   }
@@ -94,14 +104,17 @@ class DashboardView extends StatelessWidget {
   }
 }
 
-
-class _Item extends StatelessWidget {
+class FeatureItem extends StatelessWidget {
   final Function _onTap;
-  final String _texto;
+  final String _name;
   final IconData _icon;
 
-  const _Item(this._texto, this._icon, this._onTap, {Key? key})
+  const FeatureItem(this._name, this._icon, this._onTap, {Key? key})
       : super(key: key);
+
+
+  String get name => _name;
+  IconData get icon => _icon;
 
   @override
   Widget build(BuildContext context) {
@@ -124,7 +137,7 @@ class _Item extends StatelessWidget {
                   color: Colors.white,
                   size: 24.0,
                 ),
-                Text(_texto,
+                Text(_name,
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 16.0,
@@ -136,4 +149,6 @@ class _Item extends StatelessWidget {
       ),
     );
   }
+
+
 }

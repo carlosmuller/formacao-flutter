@@ -10,7 +10,7 @@ class Transaction {
   static const _jsonContactField = 'contact';
 
 
-  Transaction(this._value, this._contact, this._id);
+  Transaction(this._value, this._contact, this._id): assert(_value > 0 );
 
   int get contactAccountNumber => _contact.accountNumber;
 

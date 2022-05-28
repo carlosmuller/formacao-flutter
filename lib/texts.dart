@@ -1,6 +1,6 @@
 const transactionListTitle = 'Transações';
 const dashboardTitle = 'Bem vindo';
-const contactListTitle = 'Tranferir';
+const contactListTitle = 'Transferir';
 const contactsText = contactListTitle;
 
 //compartilhado
