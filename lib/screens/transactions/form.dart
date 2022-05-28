@@ -61,7 +61,7 @@ class TransactionFormCubit extends Cubit<TransactionFormState> {
   TransactionFormCubit(TransactionFormState initialState)
       : super(ShowFormState());
 
-  void save(Transaction newTransaction, String password, TransactionWebClient client) async {
+  Future<void> save(Transaction newTransaction, String password, TransactionWebClient client) async {
     emit(SendingFormState());
     await client
         .save(newTransaction, password)
@@ -204,7 +204,7 @@ class _BasicForm extends StatelessWidget {
                       showDialog(
                         context: context,
                         builder: (contextDialog) => TransactionAuthDialog(
-                          onConfirm: (password) {
+                          onConfirm: (password) async {
                             final double? value =
                                 double.tryParse(_valueController.text);
                             if (value == null) {
@@ -217,9 +217,8 @@ class _BasicForm extends StatelessWidget {
                             final newTransaction =
                                 Transaction(value, _contact, transactionId);
                             final transactionWebClient = AppDependencies.of(context)!.transactionWebClient;
-                            BlocProvider.of<TransactionFormCubit>(context)
+                            await BlocProvider.of<TransactionFormCubit>(context)
                                 .save(newTransaction, password, transactionWebClient);
-                            // _saveTransaction(context, password);
                           },
                         ),
                       );

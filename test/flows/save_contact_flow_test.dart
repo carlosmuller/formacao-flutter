@@ -12,13 +12,17 @@ import 'package:mockito/mockito.dart';
 
 import '../matchers/matchers.dart';
 import 'actions.dart';
-import 'save_contact_flow.mocks.dart';
+import 'save_contact_flow_test.mocks.dart';
+
 
 @GenerateMocks([ContactDao, TransactionWebClient])
 void main() {
   testWidgets('Should save a contact', (widgetTester) async {
     final mockedContactDao = MockContactDao();
+    var count = 0;
     when(mockedContactDao.listAll()).thenAnswer((_) async {
+      ++count;
+      print('Chamei listAll $count vezes');
       return List<Contact>.empty();
     });
     when(mockedContactDao.save(any)).thenAnswer((_) async => 1);
@@ -51,13 +55,13 @@ void main() {
     expect(contactForm, findsOneWidget);
 
     final nameTextField = find.byWidgetPredicate(
-      (widget) => textFieldMatcher(widget, 'Nome completo'),
+      (widget) => textFieldByLabelTextMatcher(widget, 'Nome completo'),
     );
     expect(nameTextField, findsOneWidget);
     await widgetTester.enterText(nameTextField, 'Alex');
 
     final accountNumberTextField = find.byWidgetPredicate(
-      (widget) => textFieldMatcher(widget, 'Numero da conta'),
+      (widget) => textFieldByLabelTextMatcher(widget, 'Numero da conta'),
     );
 
     expect(accountNumberTextField, findsOneWidget);
@@ -69,11 +73,10 @@ void main() {
     await widgetTester.pumpAndSettle();
 
     verify(mockedContactDao.save(Contact('Alex', 1000))).called(1);
-    final contactsListBack = find.byType(ContactListContainer);
+    final contactsListBack = find.byType(ContactList);
     expect(contactsListBack, findsOneWidget);
     await widgetTester.pumpAndSettle();
-    verify(mockedContactDao.listAll()).called(2);
-    // expect(count,
-    //     2); //gambeta para subistituir o verify com 2 pois ele não está vendo que foi chamado duas vezes
+    //gambeta para subistituir o verify com 2 pois ele não está vendo que foi chamado duas vezes
+    expect(count,2);
   });
 }

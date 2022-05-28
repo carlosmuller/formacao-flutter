@@ -13,15 +13,19 @@ import 'package:mockito/mockito.dart';
 
 import '../matchers/matchers.dart';
 import 'actions.dart';
-import 'transfer_flow.mocks.dart';
+import 'transfer_flow_test.mocks.dart';
 
 @GenerateMocks([ContactDao, TransactionWebClient, Transaction])
 void main() {
   testWidgets('Should transfer to a contact', (widgetTester) async {
     final mockedContactDao = MockContactDao();
     final mockTransactionWebClient = MockTransactionWebClient();
-    when(mockTransactionWebClient.save(any, any)).thenAnswer((realInvocation) async => MockTransaction());
+    when(mockTransactionWebClient.save(any, any))
+        .thenAnswer((realInvocation) async => MockTransaction());
+    var count = 0;
     when(mockedContactDao.listAll()).thenAnswer((_) async {
+      ++count;
+      print('Chamei listAll $count vezes');
       return [Contact('Alex', 1000)];
     });
     await widgetTester.pumpWidget(BytebankApp(
@@ -48,7 +52,7 @@ void main() {
     expect(transactionForm, findsOneWidget);
 
     final valueField = find.byWidgetPredicate(
-      (widget) => textFieldMatcher(widget, 'Valor'),
+      (widget) => textFieldByLabelTextMatcher(widget, 'Valor'),
     );
     expect(valueField, findsOneWidget);
     await widgetTester.enterText(valueField, '500');
@@ -70,6 +74,14 @@ void main() {
 
     await widgetTester.tap(confirmButton);
     await widgetTester.pumpAndSettle();
+
+    final contactListBack = find.byType(ContactListContainer);
+    expect(contactListBack, findsOneWidget);
+
+    final contactItemBack = find.byWidgetPredicate(
+          (widget) => findContactInList(widget, 'Alex', 1000),
+    );
+    expect(contactItemBack, findsOneWidget);
   });
 }
 
