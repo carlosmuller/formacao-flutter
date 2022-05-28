@@ -1,3 +1,4 @@
+import 'package:bytebank/components/transaction_auth_dialog.dart';
 import 'package:bytebank/dao/contact_dao.dart';
 import 'package:bytebank/http/webclients/transaction_web_client.dart';
 import 'package:bytebank/main.dart';
@@ -63,9 +64,7 @@ void main() {
     await widgetTester.tap(createTransactionButton);
     await widgetTester.pumpAndSettle();
 
-    final passwordField = find.byWidgetPredicate(
-      (widget) => widget is TextField && widget.obscureText,
-    );
+    final passwordField = find.byKey(transactionAuthDialogTextFieldPasswordKey);
     expect(passwordField, findsOneWidget);
     await widgetTester.enterText(passwordField, '1000');
 

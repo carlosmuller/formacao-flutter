@@ -1,7 +1,7 @@
 import 'package:bytebank/texts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
+const transactionAuthDialogTextFieldPasswordKey = Key('transactionAuthDialogTextFieldPassword');
 class TransactionAuthDialog extends StatefulWidget {
   final Function(String password) onConfirm;
 
@@ -19,6 +19,7 @@ class _TransactionAuthDialogState extends State<TransactionAuthDialog> {
     return AlertDialog(
       title: const Text(authDialogTitle),
       content: TextField(
+        key: transactionAuthDialogTextFieldPasswordKey,
         obscureText: true,
         maxLength: 4,
         maxLengthEnforcement: MaxLengthEnforcement.truncateAfterCompositionEnds,
