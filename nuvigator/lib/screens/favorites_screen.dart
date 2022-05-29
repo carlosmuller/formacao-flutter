@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nuvigator/next.dart';
 import 'package:proj/components/orgs_drawer.dart';
 import 'package:proj/components/orgs_stores_card.dart';
 import 'package:proj/core/app_colors.dart';
@@ -78,13 +79,10 @@ class FavoritesScreen extends StatelessWidget {
 
     for (final producer in producers.keys) {
       final prod = Producer.fromJson(producers[producer]);
-
+      final nuvigator = Nuvigator.of(context);
       children.add(OrgsStoresCard(
-        action: () => Navigator.pushNamed(
-          context,
-          'producer-details',
-          arguments: prod,
-        ),
+        action: () =>
+            nuvigator.open('producer-details', parameters: {'producer': prod}),
         img: prod.logo,
         distance: prod.distance,
         title: prod.name,

@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:proj/components/orgs_highlights_card.dart';
+import 'package:nuvigator/next.dart';
 import 'package:proj/components/orgs_cards_list.dart';
+import 'package:proj/components/orgs_drawer.dart';
+import 'package:proj/components/orgs_highlights_card.dart';
 import 'package:proj/components/orgs_search_bar.dart';
 import 'package:proj/components/orgs_spotlight_card.dart';
 import 'package:proj/components/orgs_stores_card.dart';
-import 'package:proj/components/orgs_drawer.dart';
 import 'package:proj/core/app_colors.dart';
 import 'package:proj/core/app_images.dart';
 import 'package:proj/models/producer_model.dart';
 import 'package:proj/repository/data.dart';
-import 'package:proj/screens/producer_details_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -19,7 +19,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+    final GlobalKey<ScaffoldState> _scaffoldKey =
+        new GlobalKey<ScaffoldState>();
 
     return Scaffold(
       key: _scaffoldKey,
@@ -40,19 +41,21 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   IconButton(
                     color: Colors.transparent,
-                    icon: Icon(Icons.menu, color: AppColors.green), // set your color here
+                    icon: Icon(Icons.menu, color: AppColors.green),
+                    // set your color here
                     onPressed: () => _scaffoldKey.currentState.openDrawer(),
                   ),
                 ],
               ),
-              SizedBox(height: 20,),
+              SizedBox(
+                height: 20,
+              ),
               Text(
                 'Olá, Leonardo',
                 style: TextStyle(
-                  fontSize: 26,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.darkGrey
-                ),
+                    fontSize: 26,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.darkGrey),
               ),
               SizedBox(height: 10),
               Text(
@@ -84,8 +87,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w700,
-                    color: AppColors.darkGrey
-                ),
+                    color: AppColors.darkGrey),
               ),
               SizedBox(height: 10),
               FutureBuilder(
@@ -114,7 +116,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 future: _generateProducerList(context),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                     return Column(children: snapshot.data);
+                    return Column(children: snapshot.data);
                   } else {
                     return Center(
                       child: CircularProgressIndicator(),
@@ -135,16 +137,12 @@ class _HomeScreenState extends State<HomeScreen> {
     final data = await Data.getJson();
     final producers = data["producers"];
 
-    for(final producer in producers.keys) {
-
+    for (final producer in producers.keys) {
       final prod = Producer.fromJson(producers[producer]);
-
+      final nuvigator = Nuvigator.of(context);
       children.add(OrgsStoresCard(
-        action: () => Navigator.pushNamed(
-          context,
-          'producer-details',
-          arguments: prod,
-        ),
+        action: () =>
+            nuvigator.open('producer-details', parameters: {'producer': prod}),
         img: prod.logo,
         distance: prod.distance,
         title: prod.name,
@@ -161,21 +159,17 @@ class _HomeScreenState extends State<HomeScreen> {
     final data = await Data.getJson();
     final highlights = data["highlights"];
 
-    for(final highlight in highlights) {
-
+    for (final highlight in highlights) {
       children.add(OrgsHighlightsCard(
         img: highlight["image"],
         title: highlight["name"],
         description: highlight["description"],
         color: AppColors.white,
-        btnAction: (){},
+        btnAction: () {},
       ));
     }
 
-    return OrgsCardsList(
-      heightList: 160,
-      cards: children
-    );
+    return OrgsCardsList(heightList: 160, cards: children);
   }
 
   Future<OrgsCardsList> _generateSpotlightCards() async {
@@ -183,20 +177,15 @@ class _HomeScreenState extends State<HomeScreen> {
     final data = await Data.getJson();
     final spotlights = data["spotlights"];
 
-    for(final spotlight in spotlights) {
-
+    for (final spotlight in spotlights) {
       children.add(OrgsSpotlightCard(
-        img: spotlight["image"],
-        price: spotlight["price"],
-        description: spotlight["description"],
-        color: AppColors.frostMint,
-        store: spotlight["store"]
-      ));
+          img: spotlight["image"],
+          price: spotlight["price"],
+          description: spotlight["description"],
+          color: AppColors.frostMint,
+          store: spotlight["store"]));
     }
 
-    return OrgsCardsList(
-        heightList: 140,
-        cards: children
-    );
+    return OrgsCardsList(heightList: 140, cards: children);
   }
 }
