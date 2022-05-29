@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:meetups/models/event.dart';
 import 'package:http/http.dart' as http;
 
-const String baseUrl = 'http://192.168.100.76:8080/api';
+const String baseUrl = 'http://192.168.15.13:8080/api';
 
 Future<List<Event>> getAllEvents() async {
   final response = await http
