@@ -8,6 +8,9 @@ import 'package:proj/repository/data.dart';
 
 class FavoritesScreen extends StatelessWidget {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  final Function onProducerDetailsClick;
+
+  FavoritesScreen({Key key, this.onProducerDetailsClick}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -81,8 +84,7 @@ class FavoritesScreen extends StatelessWidget {
       final prod = Producer.fromJson(producers[producer]);
       final nuvigator = Nuvigator.of(context);
       children.add(OrgsStoresCard(
-        action: () =>
-            nuvigator.open('producer-details', parameters: {'producer': prod}),
+        action: () => onProducerDetailsClick({'producer': prod}),
         img: prod.logo,
         distance: prod.distance,
         title: prod.name,
