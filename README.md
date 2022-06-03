@@ -1,5 +1,5 @@
 # bytebank
-Projeto utilizado para estudo durante a [formação Flutter da Alura](https://www.alura.com.br/formacao-flutter)
+Projeto utilizado para estudo durante a [formação Flutter da Alura]([https://www.alura.com.br/formacao-flutter](http://web.archive.org/web/20220528221851/https://www.alura.com.br/formacao-flutter))
 
 ## Conteitos
 
