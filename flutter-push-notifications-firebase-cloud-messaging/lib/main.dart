@@ -39,7 +39,9 @@ void main() async {
 }
 
 Future<void> _startPushNotificationsHandler(FirebaseMessaging messaging) async {
-  String? token = await messaging.getToken();
+  String? token = await messaging.getToken(
+    vapidKey: '',
+  );
   await setPushToken(token);
   //foreground
   FirebaseMessaging.onMessage.listen((RemoteMessage remoteMessage) {
@@ -55,8 +57,9 @@ Future<void> _startPushNotificationsHandler(FirebaseMessaging messaging) async {
   //terminated
   final notificationData = await FirebaseMessaging.instance.getInitialMessage();
   print(notificationData?.data);
-  if (notificationData != null && notificationData.data['message'] != null && !notificationData.data['message'].isEmpty) {
-
+  if (notificationData != null &&
+      notificationData.data['message'] != null &&
+      !notificationData.data['message'].isEmpty) {
     showMyDialog(notificationData.data['message']);
   }
 }

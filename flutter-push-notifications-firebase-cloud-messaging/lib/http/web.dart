@@ -5,10 +5,18 @@ import 'package:http/http.dart' as http;
 import 'package:meetups/models/device.dart';
 import 'package:meetups/models/event.dart';
 
-final String baseUrl = Platform.isAndroid ? 'http://192.168.15.13:8080/api' : 'http://localhost:8080/api';
+String baseUrl() {
+  try {
+    bool b = Platform.isAndroid;
+    return 'http://192.168.15.13:8080/api';
+  } catch (e) {
+    return 'http://127.0.0.1:8080/api';
+  }
+}
+
 
 Future<List<Event>> getAllEvents() async {
-  final response = await http.get(Uri.parse('$baseUrl/events'));
+  final response = await http.get(Uri.parse('${baseUrl()}/events'));
 
   if (response.statusCode == 200) {
     final List<dynamic> decodedJson = jsonDecode(response.body);
@@ -20,16 +28,16 @@ Future<List<Event>> getAllEvents() async {
 
 Future<http.Response> sendDevice(Device device) async {
   final response = await http.post(
-    Uri.parse('$baseUrl/devices'),
-    headers: {
-      'Content-Type': 'application/json; charset=UTF-8',
+      Uri.parse('${baseUrl()}/devices'),
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
 
-    },
-    body:  jsonEncode({
-      'token': device.token??'',
-      'modelo': device.model??'',
-      'marca': device.brand??''
-    })
+      },
+      body: jsonEncode({
+        'token': device.token ?? '',
+        'modelo': device.model ?? '',
+        'marca': device.brand ?? ''
+      })
   );
   return response;
 }
