@@ -1,5 +1,11 @@
-# bytebank
 Projeto utilizado para estudo durante a [formação Flutter da Alura]([https://www.alura.com.br/formacao-flutter](http://web.archive.org/web/20220528221851/https://www.alura.com.br/formacao-flutter))
+
+| :placard: Vitrine.Dev |     |
+| -------------  | --- |
+| :sparkles: Nome        | **Projetos da formação flutter** |
+| :label: Tecnologias | flutter, dart, android, ios, firebase |
+| :rocket: URL        | https://github.com/carlosmuller/formacao-flutter
+| :fire: Desafio     | [formação Flutter da Alura]([https://www.alura.com.br/formacao-flutter](http://web.archive.org/web/20220528221851/https://www.alura.com.br/formacao-flutter))
 
 ## Conteitos
 
